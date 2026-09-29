@@ -1,17 +1,17 @@
-package com.example.projet_5_safetynetspring_boot.model;
+package com.example.projet_5_safetynetspring_boot.dto;
 
 import java.util.List;
 
-public class FireResponse {
+public class FireDto {
 
-    private List<FirePersonResponse> persons;
+    private List<FirePersonDto> persons;
     private String stationNumber;
 
-    public List<FirePersonResponse> getPersons() {
+    public List<FirePersonDto> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<FirePersonResponse> persons) {
+    public void setPersons(List<FirePersonDto> persons) {
         this.persons = persons;
     }
 

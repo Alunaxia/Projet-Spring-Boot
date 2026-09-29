@@ -1,6 +1,6 @@
-package com.example.projet_5_safetynetspring_boot.model;
+package com.example.projet_5_safetynetspring_boot.dto;
 
-public class ChildAlertHouseholdMemberResponse {
+public class ChildAlertHouseholdMemberDto {
     private String firstName;
     private String lastName;
 

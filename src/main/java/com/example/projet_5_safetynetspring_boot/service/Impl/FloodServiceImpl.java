@@ -1,9 +1,8 @@
 package com.example.projet_5_safetynetspring_boot.service.Impl;
 
-import com.example.projet_5_safetynetspring_boot.model.FireStation;
-import com.example.projet_5_safetynetspring_boot.model.FloodHouseholdResponse;
-import com.example.projet_5_safetynetspring_boot.model.FloodPersonResponse;
-import com.example.projet_5_safetynetspring_boot.model.FloodResponse;
+import com.example.projet_5_safetynetspring_boot.dto.FloodHouseholdDto;
+import com.example.projet_5_safetynetspring_boot.dto.FloodPersonDto;
+import com.example.projet_5_safetynetspring_boot.dto.FloodDto;
 import com.example.projet_5_safetynetspring_boot.model.MedicalRecord;
 import com.example.projet_5_safetynetspring_boot.model.Person;
 import com.example.projet_5_safetynetspring_boot.service.AgeService;
@@ -11,6 +10,8 @@ import com.example.projet_5_safetynetspring_boot.service.FireStationService;
 import com.example.projet_5_safetynetspring_boot.service.FloodService;
 import com.example.projet_5_safetynetspring_boot.service.MedicalRecordService;
 import com.example.projet_5_safetynetspring_boot.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class FloodServiceImpl implements FloodService {
     private final PersonService personService;
     private final MedicalRecordService medicalRecordService;
     private final AgeService ageService;
+    private static final Logger logger =
+            LoggerFactory.getLogger(FloodServiceImpl.class);
 
     public FloodServiceImpl(
             FireStationService fireStationService,
@@ -37,7 +40,12 @@ public class FloodServiceImpl implements FloodService {
     }
 
     @Override
-    public FloodResponse getFloodResponse(List<String> stations) {
+    public FloodDto getFloodResponse(List<String> stations) {
+
+        logger.debug(
+                "Recherche des adresses associées aux casernes {}",
+                stations
+        );
 
         List<String> addresses = new ArrayList<>();
 
@@ -47,11 +55,17 @@ public class FloodServiceImpl implements FloodService {
             );
         }
 
-        List<FloodHouseholdResponse> households = new ArrayList<>();
+        logger.debug(
+                "{} adresse(s) trouvée(s) pour les casernes {}",
+                addresses.size(),
+                stations
+        );
+
+        List<FloodHouseholdDto> households = new ArrayList<>();
 
         for (String address : addresses) {
 
-            List<FloodPersonResponse> personResponses = new ArrayList<>();
+            List<FloodPersonDto> personResponses = new ArrayList<>();
 
             for (Person person : personService.getPersons()) {
 
@@ -62,7 +76,7 @@ public class FloodServiceImpl implements FloodService {
                 MedicalRecord medicalRecord =
                         medicalRecordService.getMedicalRecordForPerson(person);
 
-                FloodPersonResponse response = new FloodPersonResponse();
+                FloodPersonDto response = new FloodPersonDto();
 
                 response.setFirstName(person.getFirstName());
                 response.setLastName(person.getLastName());
@@ -74,7 +88,13 @@ public class FloodServiceImpl implements FloodService {
                 personResponses.add(response);
             }
 
-            FloodHouseholdResponse household = new FloodHouseholdResponse();
+            logger.debug(
+                    "{} personne(s) trouvée(s) à l'adresse {}",
+                    personResponses.size(),
+                    address
+            );
+
+            FloodHouseholdDto household = new FloodHouseholdDto();
 
             household.setAddress(address);
             household.setPersons(personResponses);
@@ -82,8 +102,14 @@ public class FloodServiceImpl implements FloodService {
             households.add(household);
         }
 
-        FloodResponse response = new FloodResponse();
+        FloodDto response = new FloodDto();
         response.setHouseholds(households);
+
+        logger.debug(
+                "{} foyer(s) trouvé(s) pour les casernes {}",
+                households.size(),
+                stations
+        );
 
         return response;
     }

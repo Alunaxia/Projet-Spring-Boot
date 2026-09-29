@@ -1,10 +1,10 @@
 package com.example.projet_5_safetynetspring_boot.service;
 
-import com.example.projet_5_safetynetspring_boot.model.FloodResponse;
+import com.example.projet_5_safetynetspring_boot.dto.FloodDto;
 
 import java.util.List;
 
 public interface FloodService {
 
-    FloodResponse getFloodResponse(List<String> stations);
+    FloodDto getFloodResponse(List<String> stations);
 }

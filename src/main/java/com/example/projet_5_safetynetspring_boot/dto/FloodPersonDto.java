@@ -1,8 +1,8 @@
-package com.example.projet_5_safetynetspring_boot.model;
+package com.example.projet_5_safetynetspring_boot.dto;
 
 import java.util.List;
 
-public class FirePersonResponse {
+public class FloodPersonDto {
 
     private String firstName;
     private String lastName;

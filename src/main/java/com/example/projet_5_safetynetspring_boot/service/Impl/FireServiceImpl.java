@@ -1,7 +1,7 @@
 package com.example.projet_5_safetynetspring_boot.service.Impl;
 
-import com.example.projet_5_safetynetspring_boot.model.FirePersonResponse;
-import com.example.projet_5_safetynetspring_boot.model.FireResponse;
+import com.example.projet_5_safetynetspring_boot.dto.FirePersonDto;
+import com.example.projet_5_safetynetspring_boot.dto.FireDto;
 import com.example.projet_5_safetynetspring_boot.model.FireStation;
 import com.example.projet_5_safetynetspring_boot.model.MedicalRecord;
 import com.example.projet_5_safetynetspring_boot.model.Person;
@@ -10,6 +10,8 @@ import com.example.projet_5_safetynetspring_boot.service.FireService;
 import com.example.projet_5_safetynetspring_boot.service.FireStationService;
 import com.example.projet_5_safetynetspring_boot.service.MedicalRecordService;
 import com.example.projet_5_safetynetspring_boot.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class FireServiceImpl implements FireService {
     private final MedicalRecordService medicalRecordService;
     private final AgeService ageService;
     private final FireStationService fireStationService;
+    private static final Logger logger =
+            LoggerFactory.getLogger(FireServiceImpl.class);
 
     public FireServiceImpl(
             PersonService personService,
@@ -36,9 +40,14 @@ public class FireServiceImpl implements FireService {
     }
 
     @Override
-    public FireResponse getFireResponse(String address) {
+    public FireDto getFireResponse(String address) {
 
-        List<FirePersonResponse> personResponses = new ArrayList<>();
+        logger.debug(
+                "Recherche des personnes à l'adresse {}",
+                address
+        );
+
+        List<FirePersonDto> personResponses = new ArrayList<>();
 
         for (Person person : personService.getPersons()) {
 
@@ -49,7 +58,7 @@ public class FireServiceImpl implements FireService {
             MedicalRecord medicalRecord =
                     medicalRecordService.getMedicalRecordForPerson(person);
 
-            FirePersonResponse response = new FirePersonResponse();
+            FirePersonDto response = new FirePersonDto();
 
             response.setFirstName(person.getFirstName());
             response.setLastName(person.getLastName());
@@ -61,6 +70,12 @@ public class FireServiceImpl implements FireService {
             personResponses.add(response);
         }
 
+        logger.debug(
+                "{} personne(s) trouvée(s) à l'adresse {}",
+                personResponses.size(),
+                address
+        );
+
         String stationNumber = null;
 
         for (FireStation fireStation : fireStationService.getFirestations()) {
@@ -70,10 +85,16 @@ public class FireServiceImpl implements FireService {
             }
         }
 
-        FireResponse response = new FireResponse();
+        FireDto response = new FireDto();
 
         response.setPersons(personResponses);
         response.setStationNumber(stationNumber);
+
+        logger.debug(
+                "Recherche terminée pour l'adresse {} : caserne {}",
+                address,
+                stationNumber
+        );
 
         return response;
     }

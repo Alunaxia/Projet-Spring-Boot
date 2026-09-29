@@ -1,13 +1,20 @@
 package com.example.projet_5_safetynetspring_boot.controller;
 
 import com.example.projet_5_safetynetspring_boot.model.FireStation;
-import com.example.projet_5_safetynetspring_boot.model.FireStationResponse;
+import com.example.projet_5_safetynetspring_boot.dto.FireStationDto;
 import com.example.projet_5_safetynetspring_boot.service.FireStationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+// Personnalisation pour le swagger
+@Tag(
+        name = "FireStation",
+        description = "Gestion des casernes et des affectations"
+)
 
 @RestController
 public class FireStationController {
@@ -33,12 +40,12 @@ public class FireStationController {
     }
 
     @GetMapping(value = "/firestation", params = "stationNumber")
-    public FireStationResponse getFireStationPerNumber(
+    public FireStationDto getFireStationPerNumber(
             @RequestParam String stationNumber) {
 
         logger.info("GET /firestation?stationNumber={}", stationNumber);
 
-        FireStationResponse response =
+        FireStationDto response =
                 fireStationService.getFireStationResponse(stationNumber);
 
         logger.info(

@@ -1,10 +1,15 @@
 package com.example.projet_5_safetynetspring_boot.service.Impl;
 
+import com.example.projet_5_safetynetspring_boot.dto.ChildAlertDto;
+import com.example.projet_5_safetynetspring_boot.dto.ChildAlertHouseholdMemberDto;
+import com.example.projet_5_safetynetspring_boot.dto.ChildAlertPersonDto;
 import com.example.projet_5_safetynetspring_boot.model.*;
 import com.example.projet_5_safetynetspring_boot.service.AgeService;
 import com.example.projet_5_safetynetspring_boot.service.ChildAlertService;
 import com.example.projet_5_safetynetspring_boot.service.MedicalRecordService;
 import com.example.projet_5_safetynetspring_boot.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +21,8 @@ public class ChildAlertServiceImpl implements ChildAlertService {
     private final PersonService personService;
     private final MedicalRecordService medicalRecordService;
     private final AgeService ageService;
+    private static final Logger logger =
+            LoggerFactory.getLogger(ChildAlertServiceImpl.class);
 
     public ChildAlertServiceImpl(
             PersonService personService,
@@ -28,14 +35,26 @@ public class ChildAlertServiceImpl implements ChildAlertService {
     }
 
     @Override
-    public ChildAlertResponse getChildAlertResponse(String address) {
+    public ChildAlertDto getChildAlertResponse(String address) {
+
+        logger.debug(
+                "Recherche des personnes à l'adresse {}",
+                address
+        );
+
         List<Person> persons = personService.getPersons();
 
         List<Person> personsAtAddress = persons.stream()
                 .filter(person -> person.getAddress().equals(address))
                 .toList();
 
-        List<ChildAlertPersonResponse> children = new ArrayList<>();
+        logger.debug(
+                "{} personne(s) trouvée(s) à l'adresse {}",
+                personsAtAddress.size(),
+                address
+        );
+
+        List<ChildAlertPersonDto> children = new ArrayList<>();
 
         for (Person person : personsAtAddress) {
             MedicalRecord medicalRecord =
@@ -44,7 +63,7 @@ public class ChildAlertServiceImpl implements ChildAlertService {
             int age = ageService.getAge(medicalRecord.getBirthdate());
 
             if (age <= 18) {
-                ChildAlertPersonResponse child = new ChildAlertPersonResponse();
+                ChildAlertPersonDto child = new ChildAlertPersonDto();
 
                 child.setFirstName(person.getFirstName());
                 child.setLastName(person.getLastName());
@@ -58,18 +77,24 @@ public class ChildAlertServiceImpl implements ChildAlertService {
             }
         }
 
-        ChildAlertResponse response = new ChildAlertResponse();
+        ChildAlertDto response = new ChildAlertDto();
 
         response.setChildren(children);
+
+        logger.debug(
+                "{} enfant(s) trouvé(s) à l'adresse {}",
+                children.size(),
+                address
+        );
 
         return response;
     }
 
-    private List<ChildAlertHouseholdMemberResponse> getHouseholdMembers(
+    private List<ChildAlertHouseholdMemberDto> getHouseholdMembers(
             Person child,
             List<Person> personsAtAddress) {
 
-        List<ChildAlertHouseholdMemberResponse> householdMembers =
+        List<ChildAlertHouseholdMemberDto> householdMembers =
                 new ArrayList<>();
 
         for (Person person : personsAtAddress) {
@@ -78,8 +103,8 @@ public class ChildAlertServiceImpl implements ChildAlertService {
                 continue;
             }
 
-            ChildAlertHouseholdMemberResponse householdMember =
-                    new ChildAlertHouseholdMemberResponse();
+            ChildAlertHouseholdMemberDto householdMember =
+                    new ChildAlertHouseholdMemberDto();
 
             householdMember.setFirstName(person.getFirstName());
             householdMember.setLastName(person.getLastName());

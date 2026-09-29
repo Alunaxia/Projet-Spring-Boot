@@ -1,7 +1,8 @@
 package com.example.projet_5_safetynetspring_boot.controller;
 
-import com.example.projet_5_safetynetspring_boot.model.FloodResponse;
+import com.example.projet_5_safetynetspring_boot.dto.FloodDto;
 import com.example.projet_5_safetynetspring_boot.service.FloodService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 import java.util.List;
+
+// Personnalisation pour le swagger
+@Tag(
+        name = "Flood",
+        description = "Informations sur les foyers desservis par plusieurs casernes"
+)
 
 @RestController
 public class FloodController {
@@ -24,7 +31,7 @@ public class FloodController {
     }
 
     @GetMapping("/flood/stations")
-    public FloodResponse getFlood(
+    public FloodDto getFlood(
             @RequestParam String stations) {
 
         logger.info("GET /flood/stations?stations={}", stations);
@@ -34,7 +41,7 @@ public class FloodController {
                         .map(String::trim)
                         .toList();
 
-        FloodResponse response =
+        FloodDto response =
                 floodService.getFloodResponse(stationNumbers);
 
         logger.info(

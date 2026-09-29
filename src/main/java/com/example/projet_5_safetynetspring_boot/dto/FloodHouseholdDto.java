@@ -1,11 +1,11 @@
-package com.example.projet_5_safetynetspring_boot.model;
+package com.example.projet_5_safetynetspring_boot.dto;
 
 import java.util.List;
 
-public class FloodHouseholdResponse {
+public class FloodHouseholdDto {
 
     private String address;
-    private List<FloodPersonResponse> persons;
+    private List<FloodPersonDto> persons;
 
     public String getAddress() {
         return address;
@@ -15,11 +15,11 @@ public class FloodHouseholdResponse {
         this.address = address;
     }
 
-    public List<FloodPersonResponse> getPersons() {
+    public List<FloodPersonDto> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<FloodPersonResponse> persons) {
+    public void setPersons(List<FloodPersonDto> persons) {
         this.persons = persons;
     }
 }

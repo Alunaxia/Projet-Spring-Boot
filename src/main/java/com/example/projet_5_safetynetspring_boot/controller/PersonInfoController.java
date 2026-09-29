@@ -1,7 +1,8 @@
 package com.example.projet_5_safetynetspring_boot.controller;
 
-import com.example.projet_5_safetynetspring_boot.model.PersonInfoResponse;
+import com.example.projet_5_safetynetspring_boot.dto.PersonInfoDto;
 import com.example.projet_5_safetynetspring_boot.service.PersonInfoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+// Personnalisation pour le swagger
+@Tag(
+        name = "Person Info",
+        description = "Informations détaillées sur les personnes"
+)
 
 @RestController
 public class PersonInfoController {
@@ -23,12 +30,12 @@ public class PersonInfoController {
     }
 
     @GetMapping("/personInfo")
-    public List<PersonInfoResponse> getPersonInfo(
+    public List<PersonInfoDto> getPersonInfo(
             @RequestParam String lastName) {
 
         logger.info("GET /personInfo?lastName={}", lastName);
 
-        List<PersonInfoResponse> responses =
+        List<PersonInfoDto> responses =
                 personInfoService.getPersonInfo(lastName);
 
         logger.info(

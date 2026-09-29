@@ -4,6 +4,8 @@ import com.example.projet_5_safetynetspring_boot.model.MedicalRecord;
 import com.example.projet_5_safetynetspring_boot.model.Person;
 import com.example.projet_5_safetynetspring_boot.repository.MedicalRecordRepository;
 import com.example.projet_5_safetynetspring_boot.service.MedicalRecordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,6 +15,8 @@ import java.util.List;
 public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     private final MedicalRecordRepository medicalRecordRepository;
+    private static final Logger logger =
+            LoggerFactory.getLogger(MedicalRecordServiceImpl.class);
 
     public MedicalRecordServiceImpl(MedicalRecordRepository medicalRecordRepository) {
         this.medicalRecordRepository = medicalRecordRepository;
@@ -23,6 +27,11 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         try {
             return medicalRecordRepository.getMedicalrecords();
         } catch (IOException e) {
+            logger.error(
+                    "Erreur lors de la lecture des dossiers médicaux",
+                    e
+            );
+
             throw new RuntimeException(
                     "Impossible de lire les dossiers médicaux",
                     e
@@ -42,6 +51,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
             return null;
         } catch (IOException e) {
+            logger.error(
+                    "Erreur lors de la recherche du dossier médical de {} {}",
+                    person.getFirstName(),
+                    person.getLastName(),
+                    e
+            );
+
             throw new RuntimeException(
                     "Impossible de lire les dossiers médicaux",
                     e
@@ -54,6 +70,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         try {
             return medicalRecordRepository.addMedicalRecord(medicalRecord);
         } catch (IOException e) {
+            logger.error(
+                    "Erreur lors de l'ajout du dossier médical de {} {}",
+                    medicalRecord.getFirstName(),
+                    medicalRecord.getLastName(),
+                    e
+            );
+
             throw new RuntimeException(
                     "Impossible d'ajouter le dossier médical",
                     e
@@ -66,6 +89,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         try {
             return medicalRecordRepository.updateMedicalRecord(medicalRecord);
         } catch (IOException e) {
+            logger.error(
+                    "Erreur lors de la modification du dossier médical de {} {}",
+                    medicalRecord.getFirstName(),
+                    medicalRecord.getLastName(),
+                    e
+            );
+
             throw new RuntimeException(
                     "Impossible de modifier le dossier médical",
                     e
@@ -78,6 +108,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         try {
             medicalRecordRepository.deleteMedicalRecord(firstName, lastName);
         } catch (IOException e) {
+            logger.error(
+                    "Erreur lors de la suppression du dossier médical de {} {}",
+                    firstName,
+                    lastName,
+                    e
+            );
+
             throw new RuntimeException(
                     "Impossible de supprimer le dossier médical",
                     e

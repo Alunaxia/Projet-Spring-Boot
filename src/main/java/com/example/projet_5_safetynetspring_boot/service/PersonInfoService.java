@@ -1,10 +1,10 @@
 package com.example.projet_5_safetynetspring_boot.service;
 
-import com.example.projet_5_safetynetspring_boot.model.PersonInfoResponse;
+import com.example.projet_5_safetynetspring_boot.dto.PersonInfoDto;
 
 import java.util.List;
 
 public interface PersonInfoService {
 
-    List<PersonInfoResponse> getPersonInfo(String lastName);
+    List<PersonInfoDto> getPersonInfo(String lastName);
 }

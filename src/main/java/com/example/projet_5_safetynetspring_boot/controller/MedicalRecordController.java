@@ -2,11 +2,18 @@ package com.example.projet_5_safetynetspring_boot.controller;
 
 import com.example.projet_5_safetynetspring_boot.model.MedicalRecord;
 import com.example.projet_5_safetynetspring_boot.service.MedicalRecordService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+// Personnalisation pour le swagger
+@Tag(
+        name = "MedicalRecord",
+        description = "Gestion des dossiers médicaux"
+)
 
 @RestController
 public class MedicalRecordController {

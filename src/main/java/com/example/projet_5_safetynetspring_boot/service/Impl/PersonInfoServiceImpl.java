@@ -2,11 +2,13 @@ package com.example.projet_5_safetynetspring_boot.service.Impl;
 
 import com.example.projet_5_safetynetspring_boot.model.MedicalRecord;
 import com.example.projet_5_safetynetspring_boot.model.Person;
-import com.example.projet_5_safetynetspring_boot.model.PersonInfoResponse;
+import com.example.projet_5_safetynetspring_boot.dto.PersonInfoDto;
 import com.example.projet_5_safetynetspring_boot.service.AgeService;
 import com.example.projet_5_safetynetspring_boot.service.MedicalRecordService;
 import com.example.projet_5_safetynetspring_boot.service.PersonInfoService;
 import com.example.projet_5_safetynetspring_boot.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class PersonInfoServiceImpl implements PersonInfoService {
     private final PersonService personService;
     private final MedicalRecordService medicalRecordService;
     private final AgeService ageService;
+    private static final Logger logger =
+            LoggerFactory.getLogger(PersonInfoServiceImpl.class);
 
     public PersonInfoServiceImpl(
             PersonService personService,
@@ -30,9 +34,14 @@ public class PersonInfoServiceImpl implements PersonInfoService {
     }
 
     @Override
-    public List<PersonInfoResponse> getPersonInfo(String lastName) {
+    public List<PersonInfoDto> getPersonInfo(String lastName) {
 
-        List<PersonInfoResponse> responses = new ArrayList<>();
+        logger.debug(
+                "Recherche des informations pour le nom {}",
+                lastName
+        );
+
+        List<PersonInfoDto> responses = new ArrayList<>();
 
         for (Person person : personService.getPersons()) {
 
@@ -43,7 +52,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
             MedicalRecord medicalRecord =
                     medicalRecordService.getMedicalRecordForPerson(person);
 
-            PersonInfoResponse response = new PersonInfoResponse();
+            PersonInfoDto response = new PersonInfoDto();
 
             response.setFirstName(person.getFirstName());
             response.setLastName(person.getLastName());
@@ -55,6 +64,12 @@ public class PersonInfoServiceImpl implements PersonInfoService {
 
             responses.add(response);
         }
+
+        logger.debug(
+                "{} personne(s) trouvée(s) pour le nom {}",
+                responses.size(),
+                lastName
+        );
 
         return responses;
     }

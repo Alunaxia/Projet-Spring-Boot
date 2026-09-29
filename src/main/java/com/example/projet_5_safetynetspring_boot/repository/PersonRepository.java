@@ -17,6 +17,7 @@ public class PersonRepository {
         this.objectMapper = objectMapper;
     }
 
+    // Méthode de lien avec le fichier de données
     public List<Person> getPersons() throws IOException {
         ClassPathResource resource = new ClassPathResource("donnees.json");
 

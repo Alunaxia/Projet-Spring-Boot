@@ -1,14 +1,19 @@
 package com.example.projet_5_safetynetspring_boot.controller;
 
-import com.example.projet_5_safetynetspring_boot.model.ChildAlertResponse;
 import com.example.projet_5_safetynetspring_boot.model.Person;
-import com.example.projet_5_safetynetspring_boot.service.Impl.PersonServiceImpl;
 import com.example.projet_5_safetynetspring_boot.service.PersonService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+
+// Personnalisation pour le swagger
+@Tag(
+        name = "Person",
+        description = "Gestion des personnes"
+)
 
 @RestController
 public class PersonController {

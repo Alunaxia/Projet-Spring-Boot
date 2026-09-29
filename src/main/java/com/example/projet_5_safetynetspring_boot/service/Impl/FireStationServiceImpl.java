@@ -1,11 +1,15 @@
 package com.example.projet_5_safetynetspring_boot.service.Impl;
 
+import com.example.projet_5_safetynetspring_boot.dto.FireStationDto;
+import com.example.projet_5_safetynetspring_boot.dto.FireStationPersonDto;
 import com.example.projet_5_safetynetspring_boot.model.*;
 import com.example.projet_5_safetynetspring_boot.repository.FireStationRepository;
 import com.example.projet_5_safetynetspring_boot.service.AgeService;
 import com.example.projet_5_safetynetspring_boot.service.FireStationService;
 import com.example.projet_5_safetynetspring_boot.service.MedicalRecordService;
 import com.example.projet_5_safetynetspring_boot.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,6 +23,8 @@ public class FireStationServiceImpl implements FireStationService {
     private final PersonService personService;
     private final MedicalRecordService medicalRecordService;
     private final AgeService ageService;
+    private static final Logger logger =
+            LoggerFactory.getLogger(FireStationServiceImpl.class);
 
     public FireStationServiceImpl(
             FireStationRepository fireStationRepository,
@@ -37,6 +43,7 @@ public class FireStationServiceImpl implements FireStationService {
         try {
             return fireStationRepository.getFirestations();
         } catch (IOException e) {
+            logger.error("Erreur lors de la lecture des casernes", e);
             throw new RuntimeException("Impossible de lire les casernes", e);
         }
     }
@@ -50,7 +57,16 @@ public class FireStationServiceImpl implements FireStationService {
                     .map(FireStation::getAddress)
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException("Impossible de lire les casernes", e);
+            logger.error(
+                    "Erreur lors de la récupération des adresses de la caserne {}",
+                    stationNumber,
+                    e
+            );
+
+            throw new RuntimeException(
+                    "Impossible de lire les casernes",
+                    e
+            );
         }
     }
 
@@ -68,12 +84,30 @@ public class FireStationServiceImpl implements FireStationService {
     }
 
     @Override
-    public FireStationResponse getFireStationResponse(String stationNumber) {
+    public FireStationDto getFireStationResponse(String stationNumber) {
+
+        logger.debug(
+                "Recherche des adresses associées à la caserne {}",
+                stationNumber
+        );
+
         List<String> addresses = getAddressesByStation(stationNumber);
+
+        logger.debug(
+                "{} adresse(s) trouvée(s) pour la caserne {}",
+                addresses.size(),
+                stationNumber
+        );
 
         List<Person> persons = getPersonsByAddresses(addresses);
 
-        List<FireStationPersonResponse> personResponses = new ArrayList<>();
+        logger.debug(
+                "{} personne(s) trouvée(s) aux adresses de la caserne {}",
+                persons.size(),
+                stationNumber
+        );
+
+        List<FireStationPersonDto> personResponses = new ArrayList<>();
         int adultCount = 0;
         int childCount = 0;
 
@@ -89,7 +123,7 @@ public class FireStationServiceImpl implements FireStationService {
                 adultCount++;
             }
 
-            FireStationPersonResponse response = new FireStationPersonResponse();
+            FireStationPersonDto response = new FireStationPersonDto();
 
             response.setFirstName(person.getFirstName());
             response.setLastName(person.getLastName());
@@ -99,7 +133,7 @@ public class FireStationServiceImpl implements FireStationService {
             personResponses.add(response);
         }
 
-        FireStationResponse response = new FireStationResponse();
+        FireStationDto response = new FireStationDto();
 
         response.setPersons(personResponses);
         response.setAdultCount(adultCount);
@@ -113,6 +147,12 @@ public class FireStationServiceImpl implements FireStationService {
         try {
             return fireStationRepository.addFireStation(fireStation);
         } catch (IOException e) {
+            logger.error(
+                    "Erreur lors de l'ajout de la caserne à l'adresse {}",
+                    fireStation.getAddress(),
+                    e
+            );
+
             throw new RuntimeException(
                     "Impossible d'ajouter la caserne",
                     e
@@ -125,6 +165,12 @@ public class FireStationServiceImpl implements FireStationService {
         try {
             return fireStationRepository.updateFireStation(fireStation);
         } catch (IOException e) {
+            logger.error(
+                    "Erreur lors de la modification de la caserne à l'adresse {}",
+                    fireStation.getAddress(),
+                    e
+            );
+
             throw new RuntimeException(
                     "Impossible de modifier la caserne",
                     e
@@ -137,6 +183,12 @@ public class FireStationServiceImpl implements FireStationService {
         try {
             fireStationRepository.deleteFireStation(address);
         } catch (IOException e) {
+            logger.error(
+                    "Erreur lors de la suppression de la caserne à l'adresse {}",
+                    address,
+                    e
+            );
+
             throw new RuntimeException(
                     "Impossible de supprimer la caserne",
                     e

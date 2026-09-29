@@ -1,12 +1,12 @@
-package com.example.projet_5_safetynetspring_boot.model;
+package com.example.projet_5_safetynetspring_boot.dto;
 
 import java.util.List;
 
-public class FireStationResponse {
+public class FireStationDto {
 
     private int adultCount;
     private int childCount;
-    private List<FireStationPersonResponse> persons;
+    private List<FireStationPersonDto> persons;
 
     public int getAdultCount() {
         return adultCount;
@@ -24,11 +24,11 @@ public class FireStationResponse {
         this.childCount = childCount;
     }
 
-    public List<FireStationPersonResponse> getPersons() {
+    public List<FireStationPersonDto> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<FireStationPersonResponse> persons) {
+    public void setPersons(List<FireStationPersonDto> persons) {
         this.persons = persons;
     }
 }

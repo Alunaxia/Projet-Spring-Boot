@@ -2,7 +2,7 @@ package com.example.projet_5_safetynetspring_boot.service;
 
 import com.example.projet_5_safetynetspring_boot.model.FireStation;
 import com.example.projet_5_safetynetspring_boot.model.Person;
-import com.example.projet_5_safetynetspring_boot.model.FireStationResponse;
+import com.example.projet_5_safetynetspring_boot.dto.FireStationDto;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface FireStationService {
 
     List<Person> getPersonsByAddresses(List<String> addresses);
 
-    FireStationResponse getFireStationResponse(String stationNumber);
+    FireStationDto getFireStationResponse(String stationNumber);
 
     FireStation addFireStation(FireStation fireStation);
 

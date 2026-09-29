@@ -1,14 +1,13 @@
-package com.example.projet_5_safetynetspring_boot.model;
+package com.example.projet_5_safetynetspring_boot.dto;
 
 import java.util.List;
 
-public class PersonInfoResponse {
+public class FirePersonDto {
 
     private String firstName;
     private String lastName;
-    private String address;
+    private String phone;
     private int age;
-    private String email;
     private List<String> medications;
     private List<String> allergies;
 
@@ -28,12 +27,12 @@ public class PersonInfoResponse {
         this.lastName = lastName;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public int getAge() {
@@ -42,14 +41,6 @@ public class PersonInfoResponse {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public List<String> getMedications() {

@@ -1,12 +1,12 @@
-package com.example.projet_5_safetynetspring_boot.model;
+package com.example.projet_5_safetynetspring_boot.dto;
 
 import java.util.List;
 
-public class ChildAlertPersonResponse {
+public class ChildAlertPersonDto {
     private String firstName;
     private String lastName;
     private int age;
-    private List<ChildAlertHouseholdMemberResponse> householdMembers;
+    private List<ChildAlertHouseholdMemberDto> householdMembers;
 
     public String getFirstName() {
         return firstName;
@@ -32,11 +32,11 @@ public class ChildAlertPersonResponse {
         this.age = age;
     }
 
-    public List<ChildAlertHouseholdMemberResponse> getHouseholdMembers() {
+    public List<ChildAlertHouseholdMemberDto> getHouseholdMembers() {
         return householdMembers;
     }
 
-    public void setHouseholdMembers(List<ChildAlertHouseholdMemberResponse> householdMembers) {
+    public void setHouseholdMembers(List<ChildAlertHouseholdMemberDto> householdMembers) {
         this.householdMembers = householdMembers;
     }
 }

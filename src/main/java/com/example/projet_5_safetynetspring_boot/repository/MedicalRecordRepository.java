@@ -18,6 +18,7 @@ public class MedicalRecordRepository {
         this.objectMapper = objectMapper;
     }
 
+    // Méthode de lien avec le fichier de données
     public List<MedicalRecord> getMedicalrecords() throws IOException {
         ClassPathResource resource = new ClassPathResource("donnees.json");
 

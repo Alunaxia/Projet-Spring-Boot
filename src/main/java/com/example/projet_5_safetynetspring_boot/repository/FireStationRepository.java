@@ -18,6 +18,7 @@ public class FireStationRepository {
         this.objectMapper = objectMapper;
     }
 
+    // Méthode de lien avec le fichier de données
     public List<FireStation> getFirestations() throws IOException {
         ClassPathResource resource = new ClassPathResource("donnees.json");
 

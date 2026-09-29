@@ -1,8 +1,8 @@
 package com.example.projet_5_safetynetspring_boot.service;
 
-import com.example.projet_5_safetynetspring_boot.model.FireResponse;
+import com.example.projet_5_safetynetspring_boot.dto.FireDto;
 
 public interface FireService {
 
-    FireResponse getFireResponse(String address);
+    FireDto getFireResponse(String address);
 }
